@@ -1,10 +1,10 @@
 package com.shoppingcart.servlet;
 
-import com.shoppingcart.pojo.Cart;
-import com.shoppingcart.pojo.CartItem;
+import com.shoppingcart.persistance.ItemDAO;
+import com.shoppingcart.pojo.Invoice;
 import com.shoppingcart.pojo.Item;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,12 +18,14 @@ import javax.servlet.http.HttpSession;
  */
 public class CatalogServlet extends HttpServlet {
 
+    public static final String INVOICE_SESSION_NAME = "invoice";
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new Cart();
+        Invoice invoice = (Invoice) session.getAttribute(INVOICE_SESSION_NAME);
+        if (invoice == null) {
+            invoice = new Invoice();
         }
 
         Item item = new Item();
@@ -34,8 +36,8 @@ public class CatalogServlet extends HttpServlet {
 
         int qty = Integer.parseInt(request.getParameter("quantity"));
 
-        cart.addItem(item, qty);
-        session.setAttribute("cart", cart);
+        invoice.addItem(item, qty);
+        session.setAttribute(INVOICE_SESSION_NAME, invoice);
         
         RequestDispatcher view = request.getRequestDispatcher("/catalog.jsp"); 
         view.forward(request, response);
@@ -43,6 +45,7 @@ public class CatalogServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         RequestDispatcher view = request.getRequestDispatcher("/catalog.jsp"); 
         view.forward(request, response);
     }

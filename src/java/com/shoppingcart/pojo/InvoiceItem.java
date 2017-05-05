@@ -6,67 +6,69 @@
 package com.shoppingcart.pojo;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
  * @author janith
  */
 @Entity
-@Table(name = "item")
+@Table(name = "invoice_item")
 @NamedQueries({
-    @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
-    @NamedQuery(name = "Item.findById", query = "SELECT i FROM Item i WHERE i.id = :id"),
-    @NamedQuery(name = "Item.findByName", query = "SELECT i FROM Item i WHERE i.name = :name"),
-    @NamedQuery(name = "Item.findByDescription", query = "SELECT i FROM Item i WHERE i.description = :description"),
-    @NamedQuery(name = "Item.findByPrice", query = "SELECT i FROM Item i WHERE i.price = :price")})
-public class Item implements Serializable {
+    @NamedQuery(name = "InvoiceItem.findAll", query = "SELECT i FROM InvoiceItem i"),
+    @NamedQuery(name = "InvoiceItem.findById", query = "SELECT i FROM InvoiceItem i WHERE i.id = :id"),
+    @NamedQuery(name = "InvoiceItem.findByQuantity", query = "SELECT i FROM InvoiceItem i WHERE i.quantity = :quantity"),
+    @NamedQuery(name = "InvoiceItem.findByPrice", query = "SELECT i FROM InvoiceItem i WHERE i.price = :price")})
+public class InvoiceItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "name")
-    private String name;
-    @Size(max = 45)
-    @Column(name = "description")
-    private String description;
+    @Column(name = "quantity")
+    private int quantity;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "price")
     private int price;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemId", fetch = FetchType.EAGER)
-    private List<InvoiceItem> invoiceItemList;
+    
+    @JoinColumn(name = "inv_id", referencedColumnName = "invoice_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Invoice invId;
+    
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Item itemId;
 
-    public Item() {
+    public InvoiceItem() {
     }
 
-    public Item(Integer id) {
+    public InvoiceItem(Integer id) {
         this.id = id;
     }
 
-    public Item(Integer id, String name, int price) {
+    public InvoiceItem(Integer id, int quantity, int price) {
         this.id = id;
-        this.name = name;
+        this.quantity = quantity;
         this.price = price;
     }
 
@@ -78,20 +80,12 @@ public class Item implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getPrice() {
@@ -102,12 +96,20 @@ public class Item implements Serializable {
         this.price = price;
     }
 
-    public List<InvoiceItem> getInvoiceItemList() {
-        return invoiceItemList;
+    public Invoice getInvId() {
+        return invId;
     }
 
-    public void setInvoiceItemList(List<InvoiceItem> invoiceItemList) {
-        this.invoiceItemList = invoiceItemList;
+    public void setInvId(Invoice invId) {
+        this.invId = invId;
+    }
+
+    public Item getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Item itemId) {
+        this.itemId = itemId;
     }
 
     @Override
@@ -120,10 +122,10 @@ public class Item implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Item)) {
+        if (!(object instanceof InvoiceItem)) {
             return false;
         }
-        Item other = (Item) object;
+        InvoiceItem other = (InvoiceItem) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -132,7 +134,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "com.shoppingcart.pojo.Item[ id=" + id + " ]";
+        return "com.shoppingcart.pojo.InvoiceItem[ id=" + id + " ]";
     }
     
 }

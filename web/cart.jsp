@@ -71,7 +71,7 @@
         <br>
         <h4>Selected Items</h4>
         <div class="table_div">
-            <c:if test="${cart.getItemList().size() > 0}">
+            <c:if test="${invoice.getInvoiceItemList().size() > 0}">
                 <table border="1">
                     <thead>
                     <td>Id</td>
@@ -81,15 +81,15 @@
                     <td>Qty.</td>
                     <td>Total</td>
                     </thead>                    
-                    <c:forEach var="cartitem" items="${cart.getItemList()}">
+                    <c:forEach var="cartitem" items="${invoice.getInvoiceItemList()}">
                         <tr>
-                            <td class="id">${cartitem.item.id}</td>
-                            <td class="name">${cartitem.item.name}</td>
-                            <td class="desc">${cartitem.item.description}</td>
-                            <td class="price">${cartitem.item.price}</td>
+                            <td class="id">${cartitem.itemId.id}</td>
+                            <td class="name">${cartitem.itemId.name}</td>
+                            <td class="desc">${cartitem.itemId.description}</td>
+                            <td class="price">${cartitem.itemId.price}</td>
                             <td class="quantity">${cartitem.quantity}</td>                        
-                            <td class="price">${cartitem.item.price*cartitem.quantity}</td>
-                            <c:set var="subTotal" scope="page" value="${subTotal + (cartitem.item.price*cartitem.quantity)}"/>
+                            <td class="price">${cartitem.itemId.price*cartitem.quantity}</td>
+                            <c:set var="subTotal" scope="page" value="${subTotal + (cartitem.itemId.price*cartitem.quantity)}"/>
                         </tr>
                     </c:forEach>
                     <tr>
@@ -97,8 +97,12 @@
                         <td class="price"><c:out value="${subTotal}"/></td>
                     </tr>
                 </table>       
+                <br>
+                <form name="checkout_button" method="POST" action="#">
+                    <input type="submit" name="checkout" value="Checkout">
+                </form>
             </c:if>
-            <c:if test="${cart == null || cart.getItemList().size() == 0}">
+            <c:if test="${invoice == null || invoice.getInvoiceItemList().size() == 0}">
                 <h4>Cart is Empty!</h4>
             </c:if>
         </div>

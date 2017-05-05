@@ -5,6 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.shoppingcart.persistance.ItemDAO" %>
+<%@ page import="com.shoppingcart.pojo.*" %>
+<%@ page import="javax.annotation.Resource" %>
+<%@ page import="javax.persistence.EntityManagerFactory" %>
+<%@ page import="javax.persistence.PersistenceUnit" %>
+<%@ page import="javax.transaction.UserTransaction" %>
+<%@ page import="java.util.List" %>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -71,7 +80,30 @@
         <h4>Select Items</h4>
         <div class="table_div">
             <table border="1">
-                <tr>
+            <%
+                ItemDAO itemDAO = ItemDAO.getInstance();
+                List<Item> items = itemDAO.getItems();
+                for(Item item : items){
+            %>
+            <tr>
+            <form name="item<%= item.getId() %>" method="POST" action="#">
+                    <td class="id"><%= item.getId() %></td>
+                    <td class="name"><%= item.getName() %></td>
+                    <td class="desc"><%= item.getDescription() %></td>
+                    <td class="price"><%= item.getPrice() %></td> 
+                    <input type="hidden" name="id" value="<%= item.getId() %>"> 
+                    <input type="hidden" name="name" value="<%= item.getName() %>"> 
+                    <input type="hidden" name="desc" value="<%= item.getDescription() %>"> 
+                    <input type="hidden" name="price" value="<%= item.getPrice() %>">
+                    <td><input class="qty" type="text" name="quantity" value="01" /></td>
+                    <td><input type="submit" name="add_to_cart" value="Add To Cart"></td>
+                </form>
+            </tr>
+            <%
+            }    
+            %>
+            
+<!--                <tr>
                 <form name="item1" method="POST" action="#">
                     <td class="id">001</td>
                     <td class="name">Item 01</td>
@@ -115,7 +147,7 @@
                     <td><input type="submit" name="add_to_cart"
                                value="Add To Cart"></td>
                 </form>
-                </tr>
+                </tr>-->
             </table>
         </div>
     </body>
