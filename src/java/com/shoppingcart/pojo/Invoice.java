@@ -16,12 +16,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -31,7 +30,8 @@ import javax.persistence.Table;
 @Table(name = "invoice")
 @NamedQueries({
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
-    @NamedQuery(name = "Invoice.findByInvoiceId", query = "SELECT i FROM Invoice i WHERE i.invoiceId = :invoiceId")})
+    @NamedQuery(name = "Invoice.findByInvoiceId", query = "SELECT i FROM Invoice i WHERE i.invoiceId = :invoiceId"),
+    @NamedQuery(name = "Invoice.findByUserId", query = "SELECT i FROM Invoice i WHERE i.userId = :userId")})
 public class Invoice implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,41 +40,18 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "invoice_id")
     private Integer invoiceId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "user_id")
+    private int userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "invId", fetch = FetchType.EAGER)
     private List<InvoiceItem> invoiceItemList;
-    @JoinColumn(name = "cust_id", referencedColumnName = "customer_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Customer custId;
 
     public Invoice() {
     }
 
     public Invoice(Integer invoiceId) {
         this.invoiceId = invoiceId;
-    }
-
-    public Integer getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(Integer invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public List<InvoiceItem> getInvoiceItemList() {
-        return invoiceItemList;
-    }
-
-    public void setInvoiceItemList(List<InvoiceItem> invoiceItemList) {
-        this.invoiceItemList = invoiceItemList;
-    }
-
-    public Customer getCustId() {
-        return custId;
-    }
-
-    public void setCustId(Customer custId) {
-        this.custId = custId;
     }
 
     public void addItem(Item item, int quantity) {
@@ -122,6 +99,35 @@ public class Invoice implements Serializable {
         return index;
     }
 
+    public Invoice(Integer invoiceId, int userId) {
+        this.invoiceId = invoiceId;
+        this.userId = userId;
+    }
+
+    public Integer getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(Integer invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public List<InvoiceItem> getInvoiceItemList() {
+        return invoiceItemList;
+    }
+
+    public void setInvoiceItemList(List<InvoiceItem> invoiceItemList) {
+        this.invoiceItemList = invoiceItemList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -146,5 +152,5 @@ public class Invoice implements Serializable {
     public String toString() {
         return "com.shoppingcart.pojo.Invoice[ invoiceId=" + invoiceId + " ]";
     }
-
+    
 }

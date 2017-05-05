@@ -34,27 +34,22 @@ import javax.validation.constraints.NotNull;
 public class InvoiceItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    
     @Basic(optional = false)
     @NotNull
     @Column(name = "quantity")
     private int quantity;
-    
     @Basic(optional = false)
     @NotNull
     @Column(name = "price")
     private int price;
-    
     @JoinColumn(name = "inv_id", referencedColumnName = "invoice_id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Invoice invId;
-    
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Item itemId;

@@ -11,9 +11,9 @@
     <property name="hibernate.format_sql">true</property>
     <property name="hibernate.default_schema">shoppingcart</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
-    <mapping class="com.shoppingcart.pojo.Customer"/>
     <mapping class="com.shoppingcart.pojo.Invoice"/>
     <mapping class="com.shoppingcart.pojo.InvoiceItem"/>
     <mapping class="com.shoppingcart.pojo.Item"/>
+    <mapping class="com.shoppingcart.pojo.User"/>
   </session-factory>
 </hibernate-configuration>

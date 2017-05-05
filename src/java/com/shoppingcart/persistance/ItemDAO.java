@@ -43,7 +43,6 @@ public class ItemDAO {
     public List<Item> getItems() throws HibernateException{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        //Query q = session.createQuery("From Item");
         Query q = session.getNamedQuery("Item.findAll");
         List<Item> items = q.list();
         return items;
