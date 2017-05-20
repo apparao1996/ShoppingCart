@@ -26,11 +26,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "invoice_item")
-@NamedQueries({
-    @NamedQuery(name = "InvoiceItem.findAll", query = "SELECT i FROM InvoiceItem i"),
-    @NamedQuery(name = "InvoiceItem.findById", query = "SELECT i FROM InvoiceItem i WHERE i.id = :id"),
-    @NamedQuery(name = "InvoiceItem.findByQuantity", query = "SELECT i FROM InvoiceItem i WHERE i.quantity = :quantity"),
-    @NamedQuery(name = "InvoiceItem.findByPrice", query = "SELECT i FROM InvoiceItem i WHERE i.price = :price")})
 public class InvoiceItem implements Serializable {
 
     private static final long serialVersionUID = 1L;

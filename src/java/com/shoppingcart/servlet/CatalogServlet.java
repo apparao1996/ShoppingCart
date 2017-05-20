@@ -1,10 +1,8 @@
 package com.shoppingcart.servlet;
 
-import com.shoppingcart.persistance.ItemDAO;
 import com.shoppingcart.pojo.Invoice;
 import com.shoppingcart.pojo.Item;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +18,8 @@ public class CatalogServlet extends HttpServlet {
 
     public static final String INVOICE_SESSION_NAME = "invoice";
     
+    //This method adds selected items to the cart.
+    //Cart is saved as a List in the session until checked out
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -44,8 +44,7 @@ public class CatalogServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {        
         RequestDispatcher view = request.getRequestDispatcher("/catalog.jsp"); 
         view.forward(request, response);
     }

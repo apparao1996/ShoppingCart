@@ -20,7 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -28,10 +27,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "invoice")
-@NamedQueries({
-    @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
-    @NamedQuery(name = "Invoice.findByInvoiceId", query = "SELECT i FROM Invoice i WHERE i.invoiceId = :invoiceId"),
-    @NamedQuery(name = "Invoice.findByUserId", query = "SELECT i FROM Invoice i WHERE i.userId = :userId")})
 public class Invoice implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,10 +35,6 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "invoice_id")
     private Integer invoiceId;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "user_id")
-    private int userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "invId", fetch = FetchType.EAGER)
     private List<InvoiceItem> invoiceItemList;
 
@@ -54,6 +45,8 @@ public class Invoice implements Serializable {
         this.invoiceId = invoiceId;
     }
 
+    //Adds an item to cart.
+    //If the cart already has the same item, increment the quantity
     public void addItem(Item item, int quantity) {
         int itemIndex = hasItem(item);
         if (itemIndex != -1) {
@@ -76,6 +69,7 @@ public class Invoice implements Serializable {
         }
     }
 
+    //Simply updates the quantity
     public void updateQuantity(Item item, int quantity) {
         int itemIndex = hasItem(item);
         if (itemIndex != -1) {
@@ -99,25 +93,12 @@ public class Invoice implements Serializable {
         return index;
     }
 
-    public Invoice(Integer invoiceId, int userId) {
-        this.invoiceId = invoiceId;
-        this.userId = userId;
-    }
-
     public Integer getInvoiceId() {
         return invoiceId;
     }
 
     public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public List<InvoiceItem> getInvoiceItemList() {

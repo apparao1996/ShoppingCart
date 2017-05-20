@@ -66,7 +66,7 @@
         <h3>&nbsp; &nbsp; Shopping Cart</h3>
         <br>
         <div id="go_to_catalog_link" height="10%" width="20%" align="right">
-            <a href="http://localhost:8080/ShoppingCart">Go to catalog</a>
+            <a href="/ShoppingCart">Go to catalog</a>
         </div>
         <br>
         <h4>Selected Items</h4>
@@ -80,17 +80,25 @@
                     <td>Unit Price</td>
                     <td>Qty.</td>
                     <td>Total</td>
+                    <td></td>
                     </thead>                    
                     <c:forEach var="cartitem" items="${invoice.getInvoiceItemList()}">
+                        <form name="cart_form" method="POST" action="">
                         <tr>
                             <td class="id">${cartitem.itemId.id}</td>
+                            <input type="hidden" name="id" value="${cartitem.itemId.id}"> 
                             <td class="name">${cartitem.itemId.name}</td>
                             <td class="desc">${cartitem.itemId.description}</td>
-                            <td class="price">${cartitem.itemId.price}</td>
-                            <td class="quantity">${cartitem.quantity}</td>                        
+                            <td class="price">${cartitem.itemId.price}</td>                            
+                            <td class="quantity">
+                                <input class="qty" type="text" name="quantity" value="${cartitem.quantity}">
+                                <input type="submit" name="update" value="Update">
+                            </td>
                             <td class="price">${cartitem.itemId.price*cartitem.quantity}</td>
+                            <td><input type="submit" name="delete" value="Remove Item"></td>
                             <c:set var="subTotal" scope="page" value="${subTotal + (cartitem.itemId.price*cartitem.quantity)}"/>
                         </tr>
+                        </form>
                     </c:forEach>
                     <tr>
                         <td colspan="5" class="price">Sub Total </td>
@@ -98,7 +106,7 @@
                     </tr>
                 </table>       
                 <br>
-                <form name="checkout_button" method="POST" action="#">
+                <form name="checkout_button" method="POST" action="">
                     <input type="submit" name="checkout" value="Checkout">
                 </form>
             </c:if>

@@ -45,6 +45,7 @@ public class ItemDAO {
         session.beginTransaction();
         Query q = session.getNamedQuery("Item.findAll");
         List<Item> items = q.list();
+        session.close();
         return items;
     }
     
